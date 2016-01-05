@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/r_body_layers">
+    <item
+        android:id="@+id/r_body"
+        android:drawable="@drawable/r_body_200_480dp" />
+    <item
+        android:id="@+id/r_calves"
+        android:drawable="@drawable/r_calves_0_200_480dp" />
+    <item
+        android:id="@+id/r_deltoids"
+        android:drawable="@drawable/r_deltoids_0_200_480dp" />
+    <item android:drawable="@drawable/r_forearms_0_200_480dp"/>
+    <item android:drawable="@drawable/r_glutes_0_200_480dp"/>
+    <item android:drawable="@drawable/r_hamstrings_0_200_480dp"/>
+    <item android:drawable="@drawable/r_lats_0_200_480dp"/>
+    <item android:drawable="@drawable/r_traps_0_200_480dp"/>
+    <item android:drawable="@drawable/r_triceps_0_200_480dp"/>
+</layer-list>

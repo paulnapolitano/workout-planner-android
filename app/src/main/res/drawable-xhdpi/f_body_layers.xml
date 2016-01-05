@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/f_body_layers">
+    <item
+        android:id="@+id/f_body"
+        android:drawable="@drawable/f_body_200_480dp"/>
+    <item android:drawable="@drawable/f_abs_0"/>
+    <item android:drawable="@drawable/f_biceps_0"/>
+    <item android:drawable="@drawable/f_deltoids_0"/>
+    <item android:drawable="@drawable/f_forearms_0"/>
+    <item android:drawable="@drawable/f_obliques_0"/>
+    <item android:drawable="@drawable/f_pectorals_0"/>
+    <item android:drawable="@drawable/f_quads_0"/>
+    <item android:drawable="@drawable/f_traps_0"/>
+</layer-list>

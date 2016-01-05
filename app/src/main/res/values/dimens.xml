@@ -1,0 +1,15 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="list_profile_item_height">96dp</dimen>
+
+    <dimen name="level_circle_diameter">64dp</dimen>
+    <dimen name="profile_header_height">64dp</dimen>
+
+    <dimen name="goal_block_width">300dp</dimen>
+
+    <dimen name="profile_divider_margin">15dp</dimen>
+</resources>

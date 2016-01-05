@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Workout App</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete Profile</string>
+    <string name="title_main">Workout Planner</string>
+    <string name="title_body">Body View</string>
+    <string name="title_calendar">Calendar View</string>
+    <string name="title_profile">My Profile</string>
+    <string name="title_edit_profile">Edit Profile</string>
+    <string name="welcome_back_msg">Welcome! Select your profile:</string>
+    <string name="menu_option_reset">Reset</string>
+    <string name="new_profile_name">Name</string>
+    <string name="profile_name_default">Default</string>
+    <string name="profile_date_default">mm/dd/yyyy</string>
+    <string name="profile_goal_header">Current Goal</string>
+    <string name="profile_goal_progress_header">Goal Progress</string>
+    <string name="edit">Edit</string>
+    <string name="profile_next_workout_header">Next Workout</string>
+    <string name="default_val">Default</string>
+    <string name="title_activity_body_rear">BodyRearActivity</string>
+
+</resources>

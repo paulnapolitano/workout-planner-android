@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <!-- "Calendar" view, should appear as action button if possible -->
+    <item
+        android:id="@+id/action_calendar"
+        android:icon="@drawable/calendar_icon_white_48dp"
+        android:title="@string/title_calendar"
+        app:showAsAction="ifRoom"
+        />
+
+    <!-- "Body" view, should appear as action button if possible -->
+    <item
+        android:id="@+id/action_body"
+        android:icon="@drawable/body_white_48dp"
+        android:title="@string/title_body"
+        app:showAsAction="ifRoom"
+        />
+
+    <!-- Settings, should always be in overflow -->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <!-- Delete Profile option in Settings -->
+    <item
+        android:id="@+id/delete_profile"
+        android:orderInCategory="101"
+        android:title="@string/action_delete"
+        app:showAsAction="never" />
+</menu>

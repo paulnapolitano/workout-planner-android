@@ -7,6 +7,7 @@
     <string name="title_calendar">Calendar View</string>
     <string name="title_profile">My Profile</string>
     <string name="title_edit_profile">Edit Profile</string>
+    <string name="title_new_goal">New Goal</string>
     <string name="welcome_back_msg">Welcome! Select your profile:</string>
     <string name="menu_option_reset">Reset</string>
     <string name="new_profile_name">Name</string>
@@ -18,5 +19,6 @@
     <string name="profile_next_workout_header">Next Workout</string>
     <string name="default_val">Default</string>
     <string name="title_activity_body_rear">BodyRearActivity</string>
+    <string name="title_activity_edit_goals">EditGoalsActivity</string>
 
 </resources>

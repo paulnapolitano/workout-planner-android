@@ -36,7 +36,7 @@ public class BodyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_body);
         final ListView listView = (ListView) findViewById(R.id.listview);
-        final View detailedView = (View) findViewById(R.id.detailed_view);
+        final View detailedView = findViewById(R.id.detailed_view);
         detailedView.setVisibility(View.GONE);
         final TextView name = (TextView) detailedView.findViewById(R.id.muscle_group_name);
         final ImageView image = (ImageView) detailedView.findViewById(R.id.muscle_group_image);
@@ -70,7 +70,7 @@ public class BodyActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!detailedView.isShown()){
-                    detailedView.setVisibility(view.VISIBLE);
+                    detailedView.setVisibility(View.VISIBLE);
                     ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) listView.getLayoutParams();
                     p.setMargins(0,0,0,0);
                     listView.requestLayout();

@@ -8,7 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -35,9 +37,11 @@ public class ProfileActivity extends AppCompatActivity {
         TextView profileDate = (TextView) findViewById(R.id.profile_start_date);
         profileDate.setText(currentProfile.getLastEdited());
 
+        // Level Wheel
         ProgressWheel progressWheel = (ProgressWheel) findViewById(R.id.level_wheel);
         progressWheel.incrementProgress(100);
 
+        // Edit Profile Button
         ImageButton editButton = (ImageButton) findViewById(R.id.edit_profile_button);
         editButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -46,7 +50,27 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        // =================== Current Goals ===================
+        if(WorkoutGoalDbHelper.profileHasGoals(context, currentProfile)){
+            // Get List of Goals associated with current profile
+            final WorkoutGoal[] workoutGoals = WorkoutGoalDbHelper.getProfileGoals(context,
+                                                                                   currentProfile);
 
+            // Inflate list of Goals using adapter
+            ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
+            final WorkoutGoalAdapter goalAdapter =
+                  new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
+            workoutGoalList.setAdapter(goalAdapter);
+        }
+
+        // ---------------------- New Goal ----------------------
+        Button newGoalButton = (Button) findViewById(R.id.workout_goal_new_button);
+        newGoalButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewGoalActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

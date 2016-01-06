@@ -23,4 +23,17 @@ public enum LiftType {
     public int number(){return number;}
     public String printable(){return printable;}
     public MuscleGroupType[] muscleGroups(){return muscleGroups;}
+
+    public static LiftType fromPrintable(String printable){
+        switch(printable){
+            case "Barbell Bench Press":
+                return BENCH_PRESS_BARBELL;
+            case "Dumbbell Bench Press":
+                return BENCH_PRESS_DUMBBELL;
+            case "Dumbbell Curls":
+                return CURLS_DUMBBELL;
+            default:
+                return null;
+        }
+    }
 }

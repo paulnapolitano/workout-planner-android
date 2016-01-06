@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by Pablo on 1/5/2016.
  */
 public class WorkoutGoalDbHelper {
-    public void addToDb(Context context, WorkoutGoal workoutGoal, WorkoutProfile workoutProfile){
+    public static void addToDb(Context context, WorkoutGoal workoutGoal){
         final WorkoutDbHelper dbHelper = new WorkoutDbHelper(context);
 
         // Create new Goal row in DB
@@ -37,7 +37,7 @@ public class WorkoutGoalDbHelper {
         db.close();
     }
 
-    public ArrayList<WorkoutGoal> getProfileGoals(Context context, WorkoutProfile workoutProfile){
+    public static WorkoutGoal[] getProfileGoals(Context context, WorkoutProfile workoutProfile){
         // Instantiate list of workoutGoals
         ArrayList<WorkoutGoal> workoutGoals = new ArrayList<>();
         WorkoutGoal workoutGoal;
@@ -126,6 +126,48 @@ public class WorkoutGoalDbHelper {
             workoutGoals.add(workoutGoal);
         }
 
-        return workoutGoals;
+        db.close();
+
+        return (WorkoutGoal[]) workoutGoals.toArray();
+    }
+
+    public static boolean profileHasGoals(Context context, WorkoutProfile workoutProfile) {
+        // Query all goals with profile, and if no results then return false
+        // Get database as readable
+        final WorkoutDbHelper dbHelper = new WorkoutDbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // ======================= Get Goals ========================
+        // Columns to get
+        String[] projection = {
+                DbContract.GoalEntry.COLUMN_NAME_PROFILE,
+        };
+
+        // Column in WHERE clause
+        String selection = DbContract.GoalEntry.COLUMN_NAME_PROFILE + "=?";
+
+        // Value in WHERE clause
+        String[] selectionArgs = {workoutProfile.getId().toString()};
+
+        // Create Cursor from database query
+        Cursor cursor = db.query(
+                DbContract.GoalEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        // Move cursor to first (only) Goal result
+        cursor.moveToFirst();
+
+        // Return boolean representing whether cursor has >0 objects
+        boolean returnBool = !cursor.isAfterLast();
+        cursor.close();
+        db.close();
+
+        return returnBool;
     }
 }

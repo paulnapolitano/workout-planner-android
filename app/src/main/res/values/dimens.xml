@@ -12,4 +12,9 @@
     <dimen name="goal_block_width">300dp</dimen>
 
     <dimen name="profile_divider_margin">15dp</dimen>
+
+    <dimen name="new_goal_label">80dp</dimen>
+    <dimen name="new_goal_value">60dp</dimen>
+    <dimen name="new_goal_spinner_block_height">30dp</dimen>
+    <dimen name="new_goal_date_picker_height">140dp</dimen>
 </resources>

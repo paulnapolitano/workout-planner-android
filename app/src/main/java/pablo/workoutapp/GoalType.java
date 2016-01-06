@@ -20,4 +20,21 @@ public enum GoalType {
 
     public int number(){return number;}
     public String printable(){return printable;}
+
+    public static GoalType fromPrintable(String printable){
+        switch(printable){
+            case "Lose Weight":
+                return LOSE_WEIGHT;
+            case "Gain Weight":
+                return GAIN_WEIGHT;
+            case "Gain Strength":
+                return GAIN_STRENGTH;
+            case "Gain Stamina":
+                return GAIN_STAMINA;
+            case "Gain Speed":
+                return GAIN_SPEED;
+            default:
+                return null;
+        }
+    }
 }

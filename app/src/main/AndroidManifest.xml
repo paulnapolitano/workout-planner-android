@@ -4,13 +4,12 @@
     package="pablo.workoutapp">
 
     <application
-        tools:replace="android:theme, android:icon"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        >
+        tools:replace="android:theme, android:icon">
         <activity
             android:name=".MainActivity"
             android:label="@string/title_main"
@@ -48,6 +47,15 @@
         <activity
             android:name=".CalendarActivity"
             android:label="@string/title_calendar"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pablo.workoutapp.ProfileActivity" />
+        </activity>
+        <activity
+            android:name=".NewGoalActivity"
+            android:label="@string/title_new_goal"
+            android:parentActivityName=".ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

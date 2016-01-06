@@ -102,137 +102,25 @@
         android:layout_marginBottom="@dimen/profile_divider_margin"
         />
 
-    <RelativeLayout
-        android:id="@+id/profile_goal_block"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:text="Current Goals"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp"/>
 
-        <LinearLayout
-            android:id="@+id/profile_goal_type_block"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/profile_goal_type_header"
-                style="@style/ProfileHeader.Uncentered"
-                android:text="@string/profile_goal_header"
-                />
-
-            <TextView
-                android:id="@+id/profile_goal_type_value"
-                style="@style/ProfileValue"
-                />
-
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/edit_goal_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:background="?android:colorBackground"
-            android:src="@drawable/edit_icon_24dp"
-            />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/profile_goal_progress_block"
+    <ListView
+        android:id="@+id/workout_goal_list"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/workout_goal_new_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/profile_goal_progress_header"
-            android:text="@string/profile_goal_progress_header"
-            style="@style/ProfileHeader.Centered"
-            />
-
-        <ProgressBar
-            android:id="@+id/profile_goal_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="100"
-            android:minHeight="30dp"
-            android:minWidth="@dimen/goal_block_width"
-            android:progress="10"
-            android:progressBackgroundTint="#c4c4c4"
-            android:progressTint="@color/colorPrimaryDark"
-            android:outlineProvider="bounds"
-            android:secondaryProgress="20"
-            android:secondaryProgressTint="@color/colorPrimary"
-
-            />
-
-        <LinearLayout
-            android:id="@+id/profile_goal_progress_value_header"
-            android:layout_width="@dimen/goal_block_width"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Start"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Current"
-                android:textSize="16sp"
-                android:textStyle="bold"
-            />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Target"
-                android:textSize="16sp"
-                android:textStyle="bold"
-            />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/profile_goal_progress_values"
-            android:layout_width="@dimen/goal_block_width"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Start"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Current"
-                />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Target"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
+        android:text="Add Goal"
+        />
 
     <View style="@style/Divider"
         android:layout_marginTop="@dimen/profile_divider_margin"
@@ -260,7 +148,7 @@
             android:id="@+id/plan_workout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Plan new workout"></Button>
+            android:text="Plan new workout"/>
 
 
     </LinearLayout>

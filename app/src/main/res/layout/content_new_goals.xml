@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".NewGoalActivity"
+    tools:showIn="@layout/activity_new_goals">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/new_goal_spinner_block_height"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose a type of goal:"
+            android:textSize="16sp"
+            android:gravity="center_vertical"/>
+
+        <Spinner
+            android:id="@+id/new_goal_goal_type_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_goal_lift_type_block"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/new_goal_spinner_block_height"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose a lift:"
+            android:textSize="16sp"
+            android:gravity="center_vertical"/>
+
+        <Spinner
+            android:id="@+id/new_goal_lift_type_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_goal_reps_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="@dimen/new_goal_label"
+            android:layout_height="wrap_content"
+            android:text="Reps:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+
+        <EditText
+            android:id="@+id/new_goal_reps_val"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/new_goal_label"
+            android:layout_height="wrap_content"
+            android:text="Current:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+
+        <EditText
+            android:id="@+id/new_goal_current_val"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="@dimen/new_goal_label"
+            android:layout_height="wrap_content"
+            android:text="Target:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+
+        <EditText
+            android:id="@+id/new_goal_target_val"
+            android:inputType="number"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/new_goal_label"
+            android:layout_height="wrap_content"
+            android:text="Start Date:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/new_goal_date_picker_height"
+            android:startYear="2016"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/new_goal_label"
+            android:layout_height="wrap_content"
+            android:text="End Date:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/new_goal_date_picker_height"
+            android:startYear="2016"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            />
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_gravity="center_horizontal"
+        />
+</LinearLayout>

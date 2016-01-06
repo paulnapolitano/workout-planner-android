@@ -18,7 +18,6 @@ import java.util.Date;
  */
 public class WorkoutProfile implements Parcelable{
     private static final String TAG = "WorkoutProfile";
-    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
 
     private int id;
     private String name;
@@ -48,7 +47,7 @@ public class WorkoutProfile implements Parcelable{
 
     public WorkoutProfile(Parcel source){
         Log.v(TAG, "ParcelData(Parcel source): time to put back parcel data");
-        history = (WorkoutHistory) source.readParcelable(WorkoutHistory.class.getClassLoader());
+        history = source.readParcelable(WorkoutHistory.class.getClassLoader());
         this.name = source.readString();
         this.image = source.readInt();
         this.level = source.readInt();
@@ -70,7 +69,7 @@ public class WorkoutProfile implements Parcelable{
         dest.writeInt(image);
         dest.writeInt(level);
         dest.writeInt(experience);
-        dest.writeString(formatter.print(lastEdited));
+        dest.writeString(DateTimeFormatHelper.dateTimeToString(lastEdited));
     }
 
     public Integer getId()             { return id; }
@@ -78,7 +77,7 @@ public class WorkoutProfile implements Parcelable{
     public int getImage()              { return image; }
     public int getLevel()              { return level; }
     public int getExperience()         { return experience; }
-    public String getLastEdited()      { return formatter.print(lastEdited); }
+    public String getLastEdited()      { return DateTimeFormatHelper.dateTimeToString(lastEdited); }
     public WorkoutHistory getHistory() { return history; }
 
     public void setId(Integer id)                 { this.id = id; }

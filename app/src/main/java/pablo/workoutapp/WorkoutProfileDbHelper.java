@@ -206,6 +206,15 @@ public class WorkoutProfileDbHelper {
         db.close();
     }
 
+    public static boolean deleteProfile(Context context, int deleteProfileId) {
+        final WorkoutDbHelper dbHelper = new WorkoutDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        boolean returnVal =  db.delete(DbContract.ProfileEntry.TABLE_NAME,
+                         DbContract.ProfileEntry.COLUMN_NAME_ID + "=" + deleteProfileId, null) > 0;
+        db.close();
+        return returnVal;
+    }
+
     public static int insertAndId(Context context, String tableName, String idColumn, ContentValues values){
         // Inserts new row into database and returns its ID
         // NOTE: Assumes that ID is AUTOINCREMENT NOT NULL

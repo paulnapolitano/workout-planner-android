@@ -18,9 +18,9 @@
         android:layout_height="@dimen/new_goal_spinner_block_height"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
-            android:text="Choose a type of goal:"
+            android:text="Goal Type:"
             android:textSize="16sp"
             android:gravity="center_vertical"/>
 
@@ -36,9 +36,9 @@
         android:layout_height="@dimen/new_goal_spinner_block_height"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
-            android:text="Choose a lift:"
+            android:text="Lift Type:"
             android:textSize="16sp"
             android:gravity="center_vertical"/>
 
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="@dimen/new_goal_label"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
             android:text="Reps:"
             android:textSize="16sp"
@@ -73,7 +73,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/new_goal_label"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
             android:text="Current:"
             android:textSize="16sp"
@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="@dimen/new_goal_label"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
             android:text="Target:"
             android:textSize="16sp"
@@ -105,23 +105,30 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/new_goal_label"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
             android:text="Start Date:"
             android:textSize="16sp"
             android:layout_gravity="center_vertical"/>
-        <DatePicker
+
+        <TextView
+            android:id="@+id/new_goal_start_date"
+            android:text="MM/DD/YYYY"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/new_goal_date_picker_height"
-            android:startYear="2016"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
+            android:layout_height="wrap_content"
             />
+
+        <Button
+            android:id="@+id/new_goal_start_date_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Change" />
     </LinearLayout>
 
     <LinearLayout
@@ -130,19 +137,24 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/new_goal_label"
+            android:layout_width="@dimen/new_goal_label_width"
             android:layout_height="wrap_content"
             android:text="End Date:"
             android:textSize="16sp"
             android:layout_gravity="center_vertical"/>
 
-        <DatePicker
+        <TextView
+            android:id="@+id/new_goal_end_date"
+            android:text="MM/DD/YYYY"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/new_goal_date_picker_height"
-            android:startYear="2016"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
-            />
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/new_goal_end_date_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Change" />
     </LinearLayout>
 
 

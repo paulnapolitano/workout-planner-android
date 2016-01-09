@@ -1,5 +1,6 @@
 package pablo.workoutapp;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +14,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity
+                             implements DeleteProfileDialogFragment.DeleteProfileDialogListener {
     Context context = this;
+    WorkoutProfile currentProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Get current profile from DB
-        final WorkoutProfile currentProfile = WorkoutProfileDbHelper.getCurrentProfile(context);
+        currentProfile = WorkoutProfileDbHelper.getCurrentProfile(context);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -98,6 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.delete_profile:
+                showDeleteDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -105,4 +109,20 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        int profileId = currentProfile.getId();
+        WorkoutProfileDbHelper.deleteProfile(context, profileId);
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+    }
+
+    public void showDeleteDialog(){
+        DialogFragment dialog = new DeleteProfileDialogFragment();
+        dialog.show(getFragmentManager(), "DeleteProfileDialogFragment");
+    }
 }

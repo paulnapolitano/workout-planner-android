@@ -21,4 +21,8 @@
     <string name="title_activity_body_rear">BodyRearActivity</string>
     <string name="title_activity_edit_goals">EditGoalsActivity</string>
 
+    <string name="dialog_delete_profile">Are you sure you want to delete this profile?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

@@ -1,19 +1,28 @@
 package pablo.workoutapp;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-public class NewGoalActivity extends AppCompatActivity {
+import org.joda.time.DateTime;
+
+public class NewGoalActivity extends AppCompatActivity
+                             implements DatePickerFragmentListener {
     Context context = this;
+    DateTime startDateTime;
+    DateTime endDateTime;
+    TextView startDateDisplay;
+    TextView endDateDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,5 +92,49 @@ public class NewGoalActivity extends AppCompatActivity {
         // =================== TargetVal input ====================
         EditText targetValInput = (EditText) findViewById(R.id.new_goal_target_val);
         targetValInput.setText("200");
+
+        // ====================== Start Date ======================
+        startDateDisplay = (TextView) findViewById(R.id.new_goal_start_date);
+        final Button startDateButton = (Button) findViewById(R.id.new_goal_start_date_button);
+        startDateTime = new DateTime();
+        startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
+        startDateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                StartDatePickerFragment startDatePickerFragment = new StartDatePickerFragment();
+                startDatePickerFragment.show(getFragmentManager(), startDatePickerFragment.getTag());
+            }
+        });
+
+        // ======================= End Date =======================
+        endDateDisplay = (TextView) findViewById(R.id.new_goal_end_date);
+        final Button endDateButton = (Button) findViewById(R.id.new_goal_end_date_button);
+        endDateTime = new DateTime();
+        endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
+        endDateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EndDatePickerFragment endDatePickerFragment = new EndDatePickerFragment();
+                endDatePickerFragment.show(getFragmentManager(), endDatePickerFragment.getTag());
+            }
+        });
+    }
+
+    @Override
+    public void onStartDateSet(DatePicker view, int year, int month, int day) {
+        startDateTime = new DateTime(year, month, day, 0, 0, 0, 0);
+        if(endDateTime.isBefore(startDateTime)){
+            endDateTime = startDateTime;
+            endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
+        }
+        startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
+    }
+
+    @Override
+    public void onEndDateSet(DatePicker view, int year, int month, int day) {
+        endDateTime = new DateTime(year, month, day, 0, 0, 0, 0);
+        if(endDateTime.isBefore(startDateTime)){
+            startDateTime = endDateTime;
+            startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
+        }
+        endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
     }
 }

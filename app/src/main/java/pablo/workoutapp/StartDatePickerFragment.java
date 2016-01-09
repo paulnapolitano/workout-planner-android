@@ -30,11 +30,11 @@ public class StartDatePickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use current date as default picker date
-        final DateTime dateTime = new DateTime();
-        int year = dateTime.getYear();
-        int month = dateTime.getMonthOfYear();
-        int day = dateTime.getDayOfMonth();
+        // Use current startDate as default picker date
+        Bundle dateBundle = getArguments();
+        int year = dateBundle.getInt("year");
+        int month = dateBundle.getInt("month");
+        int day = dateBundle.getInt("day");
 
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }

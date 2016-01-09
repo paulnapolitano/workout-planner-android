@@ -100,8 +100,19 @@ public class NewGoalActivity extends AppCompatActivity
         startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
         startDateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // Initialize fragment
                 StartDatePickerFragment startDatePickerFragment = new StartDatePickerFragment();
-                startDatePickerFragment.show(getFragmentManager(), startDatePickerFragment.getTag());
+
+                // Pass current start date to fragment
+                Bundle startDateBundle = new Bundle();
+                startDateBundle.putInt("year", startDateTime.getYear());
+                startDateBundle.putInt("month", startDateTime.getMonthOfYear() - 1);
+                startDateBundle.putInt("day", startDateTime.getDayOfMonth());
+                startDatePickerFragment.setArguments(startDateBundle);
+
+                // Show fragment
+                startDatePickerFragment.show(getFragmentManager(),
+                                             startDatePickerFragment.getTag());
             }
         });
 
@@ -112,15 +123,26 @@ public class NewGoalActivity extends AppCompatActivity
         endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
         endDateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // Initialize fragment
                 EndDatePickerFragment endDatePickerFragment = new EndDatePickerFragment();
-                endDatePickerFragment.show(getFragmentManager(), endDatePickerFragment.getTag());
+
+                // Pass current end date to fragment
+                Bundle endDateBundle = new Bundle();
+                endDateBundle.putInt("year", endDateTime.getYear());
+                endDateBundle.putInt("month", endDateTime.getMonthOfYear() - 1);
+                endDateBundle.putInt("day", endDateTime.getDayOfMonth());
+                endDatePickerFragment.setArguments(endDateBundle);
+
+                // Show fragment
+                endDatePickerFragment.show(getFragmentManager(),
+                                           endDatePickerFragment.getTag());
             }
         });
     }
 
     @Override
     public void onStartDateSet(DatePicker view, int year, int month, int day) {
-        startDateTime = new DateTime(year, month, day, 0, 0, 0, 0);
+        startDateTime = new DateTime(year, month + 1, day, 0, 0, 0, 0);
         if(endDateTime.isBefore(startDateTime)){
             endDateTime = startDateTime;
             endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
@@ -130,7 +152,7 @@ public class NewGoalActivity extends AppCompatActivity
 
     @Override
     public void onEndDateSet(DatePicker view, int year, int month, int day) {
-        endDateTime = new DateTime(year, month, day, 0, 0, 0, 0);
+        endDateTime = new DateTime(year, month + 1, day, 0, 0, 0, 0);
         if(endDateTime.isBefore(startDateTime)){
             startDateTime = endDateTime;
             startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));

@@ -26,4 +26,8 @@ public class DateTimeFormatHelper {
     public static String dateTimeToDisplayString(DateTime dateTime) {
         return dateDisplayFormatter.print(dateTime);
     }
+
+    public static String stringToDisplayString(String dateStr) {
+        return dateTimeToDisplayString(formatter.parseDateTime(dateStr));
+    }
 }

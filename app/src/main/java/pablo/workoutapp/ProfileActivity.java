@@ -18,19 +18,24 @@ public class ProfileActivity extends AppCompatActivity
                              implements DeleteProfileDialogFragment.DeleteProfileDialogListener {
     Context context = this;
     WorkoutProfile currentProfile;
+    WorkoutDatabaseUser dbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Get current profile from DB
-        currentProfile = WorkoutProfileDbHelper.getCurrentProfile(context);
-
+        // Initialize Layout and Toolbar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Enable Up button on toolbar
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dbUser = new WorkoutDatabaseUser(context);
+
+        // Get current profile from DB
+        currentProfile = dbUser.profiles.getCurrent();
 
         // Update Profile details based on db query
         // -------- Name --------
@@ -54,17 +59,22 @@ public class ProfileActivity extends AppCompatActivity
         });
 
         // =================== Current Goals ===================
-        if(WorkoutGoalDbHelper.profileHasGoals(context, currentProfile)){
-            // Get List of Goals associated with current profile
-            final WorkoutGoal[] workoutGoals = WorkoutGoalDbHelper.getProfileGoals(context,
-                                                                                   currentProfile);
-
-            // Inflate list of Goals using adapter
-            ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
-            final WorkoutGoalAdapter goalAdapter =
-                  new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
-            workoutGoalList.setAdapter(goalAdapter);
+        // Get all goals associated with current profile
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        WorkoutGoal[] workoutGoals;
+        if(dbUser.profiles.hasGoals(currentProfile)){
+            // Get array of Goals linked to current profile
+            workoutGoals = dbUser.goals.forProfile(currentProfile);
+        } else {
+            // Empty array
+            workoutGoals = new WorkoutGoal[0];
         }
+
+        // Inflate list of Goals using adapter
+        ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
+        final WorkoutGoalAdapter goalAdapter =
+                new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
+        workoutGoalList.setAdapter(goalAdapter);
 
         // ---------------------- New Goal ----------------------
         Button newGoalButton = (Button) findViewById(R.id.workout_goal_new_button);
@@ -108,11 +118,11 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         int profileId = currentProfile.getId();
-        WorkoutProfileDbHelper.deleteProfile(context, profileId);
+        dbUser.profiles.delete(profileId);
+
         Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
     }

@@ -104,6 +104,8 @@ public class NewGoalActivity extends AppCompatActivity
                 StartDatePickerFragment startDatePickerFragment = new StartDatePickerFragment();
 
                 // Pass current start date to fragment
+                // Month needs to be decremented by 1 on pass to DatePicker, since Joda monthOfYear
+                // is indexed starting at 1, and DatePicker monthOfYear is indexed starting at 0.
                 Bundle startDateBundle = new Bundle();
                 startDateBundle.putInt("year", startDateTime.getYear());
                 startDateBundle.putInt("month", startDateTime.getMonthOfYear() - 1);
@@ -127,6 +129,8 @@ public class NewGoalActivity extends AppCompatActivity
                 EndDatePickerFragment endDatePickerFragment = new EndDatePickerFragment();
 
                 // Pass current end date to fragment
+                // Month needs to be decremented by 1 on pass to DatePicker, since Joda monthOfYear
+                // is indexed starting at 1, and DatePicker monthOfYear is indexed starting at 0.
                 Bundle endDateBundle = new Bundle();
                 endDateBundle.putInt("year", endDateTime.getYear());
                 endDateBundle.putInt("month", endDateTime.getMonthOfYear() - 1);

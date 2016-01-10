@@ -15,41 +15,55 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     final Context context = this;
+
     private final static String PROFILE_NAME = "pablo.workoutapp.PROFILE_NAME";
+
+    WorkoutDatabaseUser dbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final WorkoutDbHelper dbHelper = new WorkoutDbHelper(context);
-
+        // Initialize Layout and Toolbar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        dbUser = new WorkoutDatabaseUser(context);
+
+        // Get all profiles from database
+        WorkoutProfile[] allProfiles = dbUser.profiles.getAll();
+
+        // Format profile ListView with custom layout
+        ProfileAdapter adapter = new ProfileAdapter(this, R.layout.list_element_profile, allProfiles);
         final ListView listView = (ListView) findViewById(R.id.listview);
-
-        ArrayList<String> list = WorkoutProfileDbHelper.getAllProfileNames(context);
-
-        final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
+
+        // On selection of a profile, set it to current and move to profile view
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                // Update profile to current on button press, and move to Profile view
-                final String name = (String) parent.getItemAtPosition(position);
-                WorkoutProfileDbHelper.updateCurrentProfile(context, name);
+                // Get name of clicked profile
+                final TextView nameField = (TextView) view.findViewById(R.id.profile_name);
+                final String name = (String) nameField.getText();
 
+                // Update profile to current
+                dbUser.profiles.setCurrent(name);
+
+                // Go to profile view
                 Intent intent = new Intent(context, ProfileActivity.class);
                 startActivity(intent);
             }
         });
 
-
+        // On creation of a new profile, set it to current and move to profile view
         final Button newProfileButton = (Button) findViewById(R.id.button_new_profile);
         newProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -69,13 +83,11 @@ public class MainActivity extends AppCompatActivity {
                                         // Get input from user
                                         String newName = userInput.getText().toString();
 
-                                        // Create and add new profile to database
-                                        WorkoutProfileDbHelper.addNewProfile(context, newName);
+                                        // Create and add new profile to database, make it current
+                                        dbUser.profiles.addNew(newName);
+                                        dbUser.profiles.setCurrent(newName);
 
-                                        // Make new profile current profile
-                                        WorkoutProfileDbHelper.updateCurrentProfile(context, newName);
-
-                                        // Move to profile view
+                                        // Move to profile activity
                                         Intent intent = new Intent(context, ProfileActivity.class);
                                         startActivity(intent);
                                     }

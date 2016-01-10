@@ -1,50 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/list_profile_item_height"
-    android:padding="6dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_header_block"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="6dp"
-        android:layout_marginRight="6dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/profile_default_48dp"/>
+    <RelativeLayout android:layout_width="wrap_content"
+        android:layout_height="@dimen/profile_header_height"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        >
 
-    <TextView
-        android:id="@+id/firstLine"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@id/icon"
-        android:layout_toEndOf="@id/icon"
-        android:gravity="center_vertical"
-        android:text="Name"
-        android:textSize="26sp"
-        />
+        <RelativeLayout
+            android:id="@+id/level_circle"
+            android:layout_width="@dimen/level_circle_diameter"
+            android:layout_height="@dimen/level_circle_diameter"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp">
 
-    <TextView
-        android:id="@+id/secondLine"
-        android:layout_width="fill_parent"
-        android:layout_height="12dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@id/icon"
-        android:layout_toEndOf="@id/icon"
-        android:layout_below="@id/firstLine"
-        android:gravity="center_vertical"
-        android:text="Last edited..."
-        android:textSize="16sp"
+            <pablo.workoutapp.ProgressWheel
+                android:id="@+id/level_wheel"
+                android:layout_width="@dimen/level_circle_diameter"
+                android:layout_height="@dimen/level_circle_diameter"
+                android:layout_centerInParent="true"
+                ProgressWheel:pwRimColor="@color/progressBackground"
+                ProgressWheel:pwBarColor="@color/colorPrimaryDark"
+                ProgressWheel:pwBarWidth="6dp"
+                ProgressWheel:pwRimWidth="6dp"
+                ProgressWheel:pwContourSize="0dp"
+                ProgressWheel:pwContourColor="@android:color/transparent"
+                />
 
-        />
+            <TextView
+                android:id="@+id/level_number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="2"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                />
 
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@id/level_circle"
+            android:layout_toEndOf="@id/level_circle"
+            android:paddingTop="4dp"
+            android:text="@string/profile_name_default"
+            android:textSize="22sp"
+            />
+
+        <TextView
+            android:id="@+id/profile_last_edited"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@id/level_circle"
+            android:layout_toEndOf="@id/level_circle"
+            android:layout_below="@id/profile_name"
+            android:gravity="center_vertical"
+            android:text="@string/profile_date_default"
+            android:textSize="16sp"
+
+            />
+    </RelativeLayout>
+
+    <View style="@style/Divider"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

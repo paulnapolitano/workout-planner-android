@@ -10,20 +10,24 @@ import android.support.v7.widget.Toolbar;
 public class EditProfileActivity extends AppCompatActivity {
     public final static String PROFILE_NAME = "pablo.workoutapp.PROFILE_NAME";
 
+    Context context = this;
+    WorkoutDatabaseUser dbUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Context context = this;
-
-        WorkoutProfile currentProfile = WorkoutProfileDbHelper.getCurrentProfile(context);
-        System.out.println(currentProfile.toString());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Enable Up button
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dbUser = new WorkoutDatabaseUser(context);
+
+        // Get current profile
+        WorkoutProfile currentProfile = dbUser.profiles.getCurrent();
     }
 
 }

@@ -40,12 +40,73 @@
     </style>
 
     <style name="ProfileValue">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:text">@string/default_val</item>
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+
+    <style name="NewGoalBlock">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/new_goal_block_height</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="NewGoalLabel">
+        <item name="android:layout_width">@dimen/new_goal_label_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/new_goal_label_textSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="NewGoalEditText">
+        <item name="android:inputType">number</item>
+        <item name="android:layout_width">@dimen/new_goal_edit_text_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:imeOptions">actionDone</item>
+    </style>
+
+    <style name="NewGoalSpinner">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="NewGoalDate">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/new_goal_non_spinner_padding</item>
+        <item name="android:text">@string/new_goal_date_default</item>
+        <item name="android:textSize">@dimen/new_goal_label_textSize</item>
+    </style>
+
+    <style name="NewGoalButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="NewGoalButton.Change">
+        <item name="android:text">Change</item>
+    </style>
+
+    <style name="NewGoalButton.Minus">
+        <item name="android:text">@string/minus</item>
+        <item name="android:layout_width">@dimen/new_goal_plus_minus_button_width</item>
+    </style>
+
+    <style name="NewGoalButton.Plus">
+        <item name="android:text">@string/plus</item>
+        <item name="android:layout_width">@dimen/new_goal_plus_minus_button_width</item>
     </style>
 
 </resources>

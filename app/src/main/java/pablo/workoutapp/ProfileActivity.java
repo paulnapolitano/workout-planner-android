@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity
                              implements DeleteProfileDialogFragment.DeleteProfileDialogListener {
+    // TODO: Make goal view single pane to save room, up/down arrows to rotate between goals
+    // TODO: Fix date selection bug in goal creation
     Context context = this;
     WorkoutProfile currentProfile;
     WorkoutDatabaseUser dbUser;
@@ -43,11 +45,14 @@ public class ProfileActivity extends AppCompatActivity
         profileName.setText(currentProfile.getName());
         // ----- Start Date -----
         TextView profileDate = (TextView) findViewById(R.id.profile_start_date);
-        profileDate.setText(currentProfile.getLastEdited());
+        profileDate.setText(DateTimeFormatHelper.stringToDisplayString(currentProfile.getLastEdited()));
 
-        // Level Wheel
+        // ----- Level Wheel ----
         ProgressWheel progressWheel = (ProgressWheel) findViewById(R.id.level_wheel);
-        progressWheel.incrementProgress(100);
+        progressWheel.incrementProgress(currentProfile.getExperience());
+
+        TextView profileLevel = (TextView) findViewById(R.id.level_number);
+        profileLevel.setText(currentProfile.getLevelString());
 
         // Edit Profile Button
         ImageButton editButton = (ImageButton) findViewById(R.id.edit_profile_button);
@@ -60,15 +65,15 @@ public class ProfileActivity extends AppCompatActivity
 
         // =================== Current Goals ===================
         // Get all goals associated with current profile
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         WorkoutGoal[] workoutGoals;
-        if(dbUser.profiles.hasGoals(currentProfile)){
-            // Get array of Goals linked to current profile
-            workoutGoals = dbUser.goals.forProfile(currentProfile);
-        } else {
-            // Empty array
-            workoutGoals = new WorkoutGoal[0];
-        }
+        workoutGoals = dbUser.goals.forProfile(currentProfile);
+//        if(dbUser.goals.profileHasGoals(currentProfile)){
+//            // Get array of Goals linked to current profile
+//            workoutGoals = dbUser.goals.forProfile(currentProfile);
+//        } else {
+//            // Empty array
+//            workoutGoals = new WorkoutGoal[0];
+//        }
 
         // Inflate list of Goals using adapter
         ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);

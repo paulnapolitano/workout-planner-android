@@ -76,6 +76,7 @@ public class WorkoutProfile implements Parcelable{
     public String getName()            { return name; }
     public int getImage()              { return image; }
     public int getLevel()              { return level; }
+    public String getLevelString()     { return ((Integer) level).toString(); }
     public int getExperience()         { return experience; }
     public String getLastEdited()      { return DateTimeFormatHelper.dateTimeToString(lastEdited); }
     public WorkoutHistory getHistory() { return history; }

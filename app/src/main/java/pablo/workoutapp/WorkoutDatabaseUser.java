@@ -45,8 +45,8 @@ public class WorkoutDatabaseUser {
             values.put(DbContract.GoalEntry.COLUMN_NAME_PROFILE, workoutGoal.getProfile().getId());
 
             open();
-            db.insert(DbContract.ProfileEntry.TABLE_NAME,
-                    DbContract.ProfileEntry.COLUMN_NAME_HISTORY,
+            db.insert(DbContract.GoalEntry.TABLE_NAME,
+                    DbContract.GoalEntry.COLUMN_NAME_ID,
                     values);
             close();
         }
@@ -91,10 +91,18 @@ public class WorkoutDatabaseUser {
                     sortOrder
             );
 
-            // Move cursor to first (only) Goal result
-            cursor.moveToFirst();
+            // Move cursor to first Goal result
+            // Avoid endless loop if no results, return empty list
+            if(!cursor.moveToFirst()){
+                WorkoutGoal[] goals = new WorkoutGoal[workoutGoals.size()];
+                workoutGoals.toArray(goals);
+                return goals;
+            }
 
-            while(!cursor.isAfterLast()){
+            // Move cursor before first Goal result
+            cursor.moveToPrevious();
+
+            while(cursor.moveToNext()){
                 // Instantiate goal from database information and add to list
                 int goalTypeInt = cursor.getInt(cursor.getColumnIndexOrThrow(
                         DbContract.GoalEntry.COLUMN_NAME_GOAL_TYPE));
@@ -122,24 +130,61 @@ public class WorkoutDatabaseUser {
                                 DbContract.GoalEntry.COLUMN_NAME_END_DATE)));
 
                 WorkoutGoal.Factory workoutGoalFactory = new WorkoutGoal.Factory();
-                workoutGoalFactory.setId(id)
-                        .setCurrent(currentVal)
-                        .setTarget(targetVal)
-                        .setStart(startVal)
-                        .setEndDate(endDate)
-                        .setStartDate(startDate)
-                        .setGoalType(goalType)
-                        .setLiftType(liftType)
-                        .setLiftReps(liftReps)
-                        .setProfile(workoutProfile);
-                workoutGoal = new WorkoutGoal(workoutGoalFactory);
+                workoutGoal = workoutGoalFactory.setId(id)
+                                                .setCurrent(currentVal)
+                                                .setTarget(targetVal)
+                                                .setStart(startVal)
+                                                .setEndDate(endDate)
+                                                .setStartDate(startDate)
+                                                .setGoalType(goalType)
+                                                .setLiftType(liftType)
+                                                .setLiftReps(liftReps)
+                                                .setProfile(workoutProfile)
+                                                .create();
                 workoutGoals.add(workoutGoal);
             }
 
             cursor.close();
             close();
 
-            return (WorkoutGoal[]) workoutGoals.toArray();
+            WorkoutGoal[] goals = new WorkoutGoal[workoutGoals.size()];
+            workoutGoals.toArray(goals);
+            return goals;
+        }
+        public boolean profileHasGoals(WorkoutProfile workoutProfile) {
+            // ======================= Get Goals ========================
+            // Columns to get
+            String[] projection = {
+                    DbContract.GoalEntry.COLUMN_NAME_PROFILE,
+            };
+
+            // Column in WHERE clause
+            String selection = DbContract.GoalEntry.COLUMN_NAME_PROFILE + "=?";
+
+            // Value in WHERE clause
+            String[] selectionArgs = {workoutProfile.getId().toString()};
+
+            open();
+            // Create Cursor from database query
+            Cursor cursor = db.query(
+                    DbContract.GoalEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
+            );
+
+            // Move cursor to first (only) Goal result
+            cursor.moveToFirst();
+
+            // Return boolean representing whether cursor has >0 objects
+            boolean returnBool = !cursor.isAfterLast();
+            cursor.close();
+            close();
+
+            return returnBool;
         }
         public int insert(String idColumn, ContentValues values){
             // Inserts new row into database and returns its ID
@@ -228,41 +273,6 @@ public class WorkoutDatabaseUser {
 
             return workoutProfile;
         }
-        public boolean hasGoals(WorkoutProfile workoutProfile) {
-            // ======================= Get Goals ========================
-            // Columns to get
-            String[] projection = {
-                    DbContract.GoalEntry.COLUMN_NAME_PROFILE,
-            };
-
-            // Column in WHERE clause
-            String selection = DbContract.GoalEntry.COLUMN_NAME_PROFILE + "=?";
-
-            // Value in WHERE clause
-            String[] selectionArgs = {workoutProfile.getId().toString()};
-
-            open();
-            // Create Cursor from database query
-            Cursor cursor = db.query(
-                    DbContract.GoalEntry.TABLE_NAME,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null,
-                    null,
-                    null
-            );
-
-            // Move cursor to first (only) Goal result
-            cursor.moveToFirst();
-
-            // Return boolean representing whether cursor has >0 objects
-            boolean returnBool = !cursor.isAfterLast();
-            cursor.close();
-            close();
-
-            return returnBool;
-        }
         public ArrayList<String> getAllNames() {
             // ======================= Get Profile ========================
             // Columns to get
@@ -319,7 +329,8 @@ public class WorkoutDatabaseUser {
             };
 
             // Sorting criteria
-            String sortOrder = DbContract.ProfileEntry.COLUMN_NAME_LAST_EDITED + " DESC";
+            String sortOrder = DbContract.ProfileEntry.COLUMN_NAME_CURRENT + " DESC" + ", "
+                             + DbContract.ProfileEntry.COLUMN_NAME_LAST_EDITED + " DESC";
 
             // Create Cursor from database query
             open();

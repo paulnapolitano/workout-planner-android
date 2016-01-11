@@ -46,9 +46,9 @@ public class WorkoutGoalAdapter extends ArrayAdapter<WorkoutGoal> {
 
         WorkoutGoal workoutGoal = data[position];
         holder.type.setText(workoutGoal.toString());
-        holder.startVal.setText(workoutGoal.getStart());
-        holder.currentVal.setText(workoutGoal.getCurrent());
-        holder.targetVal.setText(workoutGoal.getTarget());
+        holder.startVal.setText(workoutGoal.getStart().toString());
+        holder.currentVal.setText(workoutGoal.getCurrent().toString());
+        holder.targetVal.setText(workoutGoal.getTarget().toString());
 
         return row;
     }

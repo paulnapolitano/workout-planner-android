@@ -7,8 +7,8 @@ public enum GoalType {
     LOSE_WEIGHT   (0, "Lose Weight"),
     GAIN_WEIGHT   (1, "Gain Weight"),
     GAIN_STRENGTH (2, "Gain Strength"),
-    GAIN_STAMINA  (3, "Gain Stamina"),
-    GAIN_SPEED    (4, "Gain Speed");
+    GAIN_STAMINA  (3, "Gain Stamina");
+//    GAIN_SPEED    (4, "Gain Speed");
 
     private String printable;
     private int number;
@@ -31,8 +31,8 @@ public enum GoalType {
                 return GAIN_STRENGTH;
             case "Gain Stamina":
                 return GAIN_STAMINA;
-            case "Gain Speed":
-                return GAIN_SPEED;
+//            case "Gain Speed":
+//                return GAIN_SPEED;
             default:
                 return null;
         }

@@ -23,6 +23,18 @@ public class NewGoalActivity extends AppCompatActivity
     DateTime endDateTime;
     TextView startDateDisplay;
     TextView endDateDisplay;
+    View liftTypeBlock;
+    View liftRepsBlock;
+
+    private final int LIFT_REPS = NewGoalFactoryHelper.LIFT_REPS;
+    private final int CURRENT = NewGoalFactoryHelper.CURRENT;
+    private final int TARGET = NewGoalFactoryHelper.TARGET;
+
+    private final int SHOW_WEIGHT = 0;
+    private final int SHOW_LIFTING = 1;
+    private final int SHOW_ALL = 2;
+
+    private int visibility = SHOW_WEIGHT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +47,10 @@ public class NewGoalActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final WorkoutGoal.Factory newGoalFactory = new WorkoutGoal.Factory();
+        final NewGoalFactoryHelper factoryHelper = new NewGoalFactoryHelper(newGoalFactory);
+        final WorkoutDatabaseUser dbUser = new WorkoutDatabaseUser(context);
 
-        // ==================== GoalType selector ====================
+        // =================================== GoalType selector ===================================
         String[] goalTypeChoices = new String[GoalType.values().length];
         for(int i = 0; i<GoalType.values().length; i++){
             goalTypeChoices[i] = GoalType.values()[i].printable();
@@ -44,21 +58,38 @@ public class NewGoalActivity extends AppCompatActivity
 
         ArrayAdapter<CharSequence> goalTypeAdapter =
                 new ArrayAdapter<CharSequence>(context,
-                        android.R.layout.simple_spinner_item,
+                        android.R.layout.simple_spinner_dropdown_item,
                         goalTypeChoices);
 
         Spinner goalTypeSpinner = (Spinner) findViewById(R.id.new_goal_goal_type_spinner);
         goalTypeSpinner.setAdapter(goalTypeAdapter);
+
+        // Set factory goal type to default value
+        newGoalFactory.setGoalType(GoalType.values()[0]);
+
         goalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                newGoalFactory.setGoalType(GoalType.fromPrintable((String) parent.getItemAtPosition(position)));
+                GoalType goal = GoalType.fromPrintable((String) parent.getItemAtPosition(position));
+                newGoalFactory.setGoalType(goal);
+                assert(goal!=null);
+                switch(goal){
+                    case GAIN_STAMINA:
+                        visibility = SHOW_LIFTING;
+                        break;
+                    case GAIN_STRENGTH:
+                        visibility = SHOW_LIFTING;
+                        break;
+                    default:
+                        visibility = SHOW_WEIGHT;
+                }
+                updateVisibility();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        // ==================== LiftType selector ====================
+        // =================================== LiftType selector ===================================
         String[] liftTypeChoices = new String[LiftType.values().length];
         for(int i = 0; i<LiftType.values().length; i++){
             liftTypeChoices[i] = LiftType.values()[i].printable();
@@ -66,38 +97,90 @@ public class NewGoalActivity extends AppCompatActivity
 
         ArrayAdapter<CharSequence> liftTypeAdapter =
                 new ArrayAdapter<CharSequence>(context,
-                        android.R.layout.simple_spinner_item,
+                        android.R.layout.simple_spinner_dropdown_item,
                         liftTypeChoices);
 
         Spinner liftTypeSpinner = (Spinner) findViewById(R.id.new_goal_lift_type_spinner);
         liftTypeSpinner.setAdapter(liftTypeAdapter);
+
+        // Set factory goal type to default value
+        newGoalFactory.setLiftType(LiftType.values()[0]);
+
         liftTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                newGoalFactory.setLiftType(LiftType.fromPrintable((String) parent.getItemAtPosition(position)));
+                LiftType lift = LiftType.fromPrintable((String) parent.getItemAtPosition(position));
+                newGoalFactory.setLiftType(lift);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        // ==================== LiftReps input ====================
-        View liftRepsBlock = findViewById(R.id.new_goal_reps_block);
-        EditText liftRepsInput = (EditText) findViewById(R.id.new_goal_reps_val);
-        liftRepsInput.setText("10");
 
-        // =================== CurrentVal input ===================
-        EditText startValInput = (EditText) findViewById(R.id.new_goal_current_val);
-        startValInput.setText("200");
+        // ==================================== LiftReps input ====================================
+        // Get relevant views from layout
+        final EditText liftRepsInput = (EditText) findViewById(R.id.new_goal_reps_val);
+        final Button   liftRepsMinus = (Button)   findViewById(R.id.new_goal_reps_minus);
+        final Button   liftRepsPlus =  (Button)   findViewById(R.id.new_goal_reps_plus);
 
-        // =================== TargetVal input ====================
-        EditText targetValInput = (EditText) findViewById(R.id.new_goal_target_val);
-        targetValInput.setText("200");
+        // Initialize field value
+        factoryHelper.setField(LIFT_REPS, 10, liftRepsInput);
 
-        // ====================== Start Date ======================
+        // Configure +/- buttons
+        liftRepsMinus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.decrementField(LIFT_REPS, liftRepsInput); }
+        });
+        liftRepsPlus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.incrementField(LIFT_REPS, liftRepsInput); }
+        });
+
+
+        // =================================== CurrentVal input ===================================
+        // Get relevant views from layout
+        final EditText startValInput = (EditText) findViewById(R.id.new_goal_current_val);
+        final Button   currentMinus =  (Button)   findViewById(R.id.new_goal_current_minus);
+        final Button   currentPlus =   (Button)   findViewById(R.id.new_goal_current_plus);
+
+        // Initialize field value
+        factoryHelper.setField(CURRENT, 200, startValInput);
+
+        // Configure +/- buttons
+        currentMinus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.decrementField(CURRENT, startValInput); }
+        });
+        currentPlus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.incrementField(CURRENT, startValInput); }
+        });
+
+
+        // ==================================== TargetVal input ====================================
+        // Get relevant views from layout
+        final EditText targetValInput = (EditText) findViewById(R.id.new_goal_target_val);
+        final Button   targetMinus =    (Button)   findViewById(R.id.new_goal_target_minus);
+        final Button   targetPlus =     (Button)   findViewById(R.id.new_goal_target_plus);
+
+        // Initialize field value
+        factoryHelper.setField(TARGET, 200, targetValInput);
+
+        // Configure +/- buttons' onClick methods
+        targetMinus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.decrementField(TARGET, targetValInput); }
+        });
+        targetPlus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { factoryHelper.incrementField(TARGET, targetValInput); }
+        });
+
+
+        // ====================================== Start Date ======================================
+        // Get relevant views from layout
         startDateDisplay = (TextView) findViewById(R.id.new_goal_start_date);
         final Button startDateButton = (Button) findViewById(R.id.new_goal_start_date_button);
+
+        // Initialize date display
         startDateTime = new DateTime();
         startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
+
+        // Configure date selection button's onClick method
         startDateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Initialize fragment
@@ -113,16 +196,21 @@ public class NewGoalActivity extends AppCompatActivity
                 startDatePickerFragment.setArguments(startDateBundle);
 
                 // Show fragment
-                startDatePickerFragment.show(getFragmentManager(),
-                                             startDatePickerFragment.getTag());
+                startDatePickerFragment.show(getFragmentManager(),startDatePickerFragment.getTag());
             }
         });
 
-        // ======================= End Date =======================
+
+        // ======================================= End Date =======================================
+        // Get relevant views from layout
         endDateDisplay = (TextView) findViewById(R.id.new_goal_end_date);
         final Button endDateButton = (Button) findViewById(R.id.new_goal_end_date_button);
+
+        // Initialize date display
         endDateTime = new DateTime();
         endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
+
+        // Configure date selection button's onClick method
         endDateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Initialize fragment
@@ -138,10 +226,48 @@ public class NewGoalActivity extends AppCompatActivity
                 endDatePickerFragment.setArguments(endDateBundle);
 
                 // Show fragment
-                endDatePickerFragment.show(getFragmentManager(),
-                                           endDatePickerFragment.getTag());
+                endDatePickerFragment.show(getFragmentManager(), endDatePickerFragment.getTag());
             }
         });
+
+
+        // ===================================== Create Button =====================================
+        Button createButton = (Button) findViewById(R.id.new_goal_create_button);
+        createButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                // Set goal's profile to current
+                WorkoutProfile currentProfile = dbUser.profiles.getCurrent();
+                newGoalFactory.setProfile(currentProfile);
+
+                // Add goal to database
+                WorkoutGoal newGoal = newGoalFactory.create();
+                dbUser.goals.objectToRow(newGoal);
+
+                // Move back to profile view
+                finish();
+            }
+        });
+
+
+        // =================================== Show/Hide Fields ===================================
+        liftTypeBlock = findViewById(R.id.new_goal_block_lift_type);
+        liftRepsBlock = findViewById(R.id.new_goal_block_lift_reps);
+
+        updateVisibility();
+    }
+
+
+    public void updateVisibility(){
+        switch(visibility) {
+            case SHOW_LIFTING:
+                liftRepsBlock.setVisibility(View.VISIBLE);
+                liftTypeBlock.setVisibility(View.VISIBLE);
+                break;
+            case SHOW_WEIGHT:
+                liftRepsBlock.setVisibility(View.GONE);
+                liftTypeBlock.setVisibility(View.GONE);
+                break;
+        }
     }
 
     @Override

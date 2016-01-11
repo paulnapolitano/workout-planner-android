@@ -44,12 +44,16 @@ public class WorkoutGoal {
             case LOSE_WEIGHT:
                 returnString = String.format("Lose %d lb in %d days",
                         (start - target), Days.daysBetween(startDate, endDate).getDays());
+                break;
             case GAIN_WEIGHT:
                 returnString = String.format("Gain %d lb in %d days",
                         (target - start), Days.daysBetween(startDate, endDate).getDays());
+                break;
             case GAIN_STRENGTH:
-                returnString = String.format("Add %d lb to %s %dRM",
-                        (target - start), lift.printable(), liftReps);
+                returnString = String.format("Add %d lb to %s %dRM in %d days",
+                        (target - start), lift.printable(), liftReps,
+                        Days.daysBetween(startDate, endDate).getDays());
+                break;
             default:
                 returnString = "None";
         }
@@ -60,14 +64,13 @@ public class WorkoutGoal {
     public int getId()                 { return id; }
     public GoalType getGoalType()      { return goal; }
     public LiftType getLiftType()      { return lift; }
-    public int getLiftReps()           { return liftReps; }
+    public Integer getLiftReps()           { return liftReps; }
     public DateTime getStartDate()     { return startDate; }
     public DateTime getEndDate()       { return endDate; }
     public WorkoutProfile getProfile() { return profile; }
-    public int getStart()              { return start; }
-    public int getCurrent()            { return current; }
-    public int getTarget()             { return target; }
-
+    public Integer getStart()              { return start; }
+    public Integer getCurrent()            { return current; }
+    public Integer getTarget()             { return target; }
 
     public static class Factory {
         private int id;
@@ -76,10 +79,10 @@ public class WorkoutGoal {
         private DateTime startDate;
         private DateTime endDate;
         private WorkoutProfile profile;
-        private int liftReps;
-        private int start;
-        private int current;
-        private int target;
+        private Integer liftReps;
+        private Integer start;
+        private Integer current;
+        private Integer target;
 
         public Factory(){
             this.goal = null;
@@ -94,7 +97,7 @@ public class WorkoutGoal {
             this.lift = lift;
             return this;
         }
-        public Factory setLiftReps(int liftReps){
+        public Factory setLiftReps(Integer liftReps){
             this.liftReps = liftReps;
             return this;
         }
@@ -106,15 +109,15 @@ public class WorkoutGoal {
             this.endDate = endDate;
             return this;
         }
-        public Factory setStart(int start){
+        public Factory setStart(Integer start){
             this.start = start;
             return this;
         }
-        public Factory setCurrent(int current){
+        public Factory setCurrent(Integer current){
             this.current = current;
             return this;
         }
-        public Factory setTarget(int target){
+        public Factory setTarget(Integer target){
             this.target = target;
             return this;
         }
@@ -127,15 +130,23 @@ public class WorkoutGoal {
             return this;
         }
 
-        public GoalType       getGoalType(){ return this.goal; }
-        public LiftType       getLiftType(){ return this.lift; }
-        public int            getLiftReps(){ return this.liftReps; }
+        public GoalType       getGoalType() { return this.goal; }
+        public LiftType       getLiftType() { return this.lift; }
+        public Integer        getLiftReps() { return this.liftReps; }
         public DateTime       getStartDate(){ return this.startDate; }
-        public DateTime       getEndDate(){ return this.endDate; }
-        public int            getStart(){ return this.start; }
-        public int            getCurrent(){ return this.current; }
-        public int            getTarget(){ return this.target; }
-        public WorkoutProfile getProfile(){ return this.profile; }
-        public int            getId(){ return this.id; }
+        public DateTime       getEndDate()  { return this.endDate; }
+        public Integer        getStart()    { return this.start; }
+        public Integer        getCurrent()  { return this.current; }
+        public Integer        getTarget()   { return this.target; }
+        public WorkoutProfile getProfile()  { return this.profile; }
+        public int            getId()       { return this.id; }
+
+        public WorkoutGoal create(){
+            if(this.start == null){
+                this.start = this.current;
+            }
+
+            return new WorkoutGoal(this);
+        }
     }
 }

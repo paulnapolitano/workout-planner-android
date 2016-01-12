@@ -2,6 +2,7 @@ package pablo.workoutapp;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -246,6 +247,8 @@ public class NewGoalActivity extends AppCompatActivity
                 dbUser.goals.objectToRow(newGoal);
 
                 // Move back to profile view
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });

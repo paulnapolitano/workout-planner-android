@@ -77,7 +77,7 @@ public class WorkoutDatabaseUser {
             String[] selectionArgs = { workoutProfile.getId().toString() };
 
             // Sorting criteria
-            String sortOrder = DbContract.GoalEntry.COLUMN_NAME_START_DATE + " DESC";
+            String sortOrder = DbContract.GoalEntry.COLUMN_NAME_START_DATE + " ASC";
 
             // Create Cursor from database query
             open();

@@ -12,11 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 /**
  * Created by Pablo on 1/11/2016.
  */
 public class WorkoutGoalPagerFragment extends Fragment {
     // TODO: Limit number of queries made here
+    // FIXME: 1/12/2016 PagerAdapter shows duplicates unless new fragments added to END of its list
 
     /**
      * The number of pages (wizard steps) to show.
@@ -33,7 +36,6 @@ public class WorkoutGoalPagerFragment extends Fragment {
      */
     private PagerAdapter pagerAdapter;
 
-    WorkoutGoal[] workoutGoals;
     Button backButton;
     Button forwardButton;
 
@@ -45,19 +47,40 @@ public class WorkoutGoalPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        System.out.println("WorkoutGoalPagerFragment.onCreateView()");
+
         // Inflate the layout for this fragment
         View layoutView = inflater.inflate(R.layout.fragment_workout_goal_pager, container, false);
         Context context = layoutView.getContext();
 
         WorkoutDatabaseUser dbUser = new WorkoutDatabaseUser(context);
         WorkoutProfile currentProfile = dbUser.profiles.getCurrent();
-        workoutGoals = dbUser.goals.forProfile(currentProfile);
+
+        WorkoutGoal[] workoutGoals = dbUser.goals.forProfile(currentProfile);
         numPages = workoutGoals.length;
 
         // Instantiate a ViewPager and a PagerAdapter.
         pager = (ViewPager) layoutView.findViewById(R.id.pager);
-        final PagerAdapter pagerAdapter = new WorkoutGoalPagerAdapter(getFragmentManager());
+        pager.setCurrentItem(0);
+
+        pagerAdapter = new WorkoutGoalPagerAdapter(getChildFragmentManager(), workoutGoals);
         pager.setAdapter(pagerAdapter);
+        updateGoals();
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateButtonVisibility();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         // Buttons
         backButton = (Button) layoutView.findViewById(R.id.back_button);
@@ -103,14 +126,26 @@ public class WorkoutGoalPagerFragment extends Fragment {
         }
     }
 
+    private void updateGoals(){
+        pagerAdapter.notifyDataSetChanged();
+    }
+
     private class WorkoutGoalPagerAdapter extends FragmentStatePagerAdapter {
-        public WorkoutGoalPagerAdapter(FragmentManager fm) {
+        private WorkoutGoal[] workoutGoals;
+
+        public WorkoutGoalPagerAdapter(FragmentManager fm, WorkoutGoal[] workoutGoals) {
             super(fm);
+            this.workoutGoals = workoutGoals;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return WorkoutGoalFragment.init(workoutGoals[position]);
+            System.out.println("GETTING ITEM");
+            return WorkoutGoalFragment.newInstance(workoutGoals[position]);
+        }
+
+        public int getItemPosition(Object item) {
+            return PagerAdapter.POSITION_NONE;
         }
 
         @Override

@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,9 +21,13 @@ public class ProfileActivity extends AppCompatActivity
     // TODO: Make activity update after goal creation
     // TODO: Make goal fragment GONE if no goals for profile
     Context context = this;
+    WorkoutDatabaseUser dbUser = new WorkoutDatabaseUser(context);
+
     WorkoutProfile currentProfile;
-    WorkoutDatabaseUser dbUser;
-    private WorkoutGoal[] workoutGoals;
+
+    static final int GOAL_REQUEST = 0;
+
+    private boolean returningWithResult = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,17 @@ public class ProfileActivity extends AppCompatActivity
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbUser = new WorkoutDatabaseUser(context);
-
         // Get current profile from DB
         currentProfile = dbUser.profiles.getCurrent();
+
+        // Add goal swipe fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        WorkoutGoalPagerFragment goalFragment = new WorkoutGoalPagerFragment();
+        fragmentManager.beginTransaction()
+                       .replace(R.id.workout_goal_fragment_container, goalFragment, "GOAL_FRAG")
+                       .commit();
+
+
 
         // Update Profile details based on db query
         // -------- Name --------
@@ -68,22 +77,12 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
-        // =================== Current Goals ===================
-        // Get all goals associated with current profile
-        // workoutGoals = dbUser.goals.forProfile(currentProfile);
-
-        // Inflate list of Goals using adapter
-//        ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
-//        final WorkoutGoalAdapter goalAdapter =
-//                new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
-//        workoutGoalList.setAdapter(goalAdapter);
-
         // ---------------------- New Goal ----------------------
         Button newGoalButton = (Button) findViewById(R.id.workout_goal_new_button);
         newGoalButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, NewGoalActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, GOAL_REQUEST);
             }
         });
     }
@@ -120,7 +119,32 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GOAL_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                returningWithResult = true;
+            }
+        }
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(returningWithResult){
+            System.out.println("RETURNING WITH RESULT!");
+            // Refresh goal fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment goalFrag = fragmentManager.findFragmentByTag("GOAL_FRAG");
+            final FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.detach(goalFrag);
+            ft.attach(goalFrag);
+            ft.commit();
+        }
+
+        returningWithResult = false;
+    }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {

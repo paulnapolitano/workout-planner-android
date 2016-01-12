@@ -9,29 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class WorkoutGoalFragment extends Fragment {
-    WorkoutGoal workoutGoal;
+    protected WorkoutGoal workoutGoal;
 
     public WorkoutGoalFragment() {
         // Required empty public constructor
     }
 
-    public static WorkoutGoalFragment init(WorkoutGoal workoutGoal){
+    public static WorkoutGoalFragment newInstance(WorkoutGoal workoutGoal){
         WorkoutGoalFragment workoutGoalFragment = new WorkoutGoalFragment();
         Bundle args = workoutGoal.toBundle();
         workoutGoalFragment.setArguments(args);
         return workoutGoalFragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-
-        if(args == null){
-            this.workoutGoal = new WorkoutGoal.Factory().create();
-        } else {
-            this.workoutGoal = WorkoutGoal.fromBundle(args);
-        }
     }
 
     @Override
@@ -40,8 +28,15 @@ public class WorkoutGoalFragment extends Fragment {
         // Inflate the layout for this fragment
         View layoutView = inflater.inflate(R.layout.fragment_workout_goal, container, false);
 
-        WorkoutGoalHolder holder;
+        // Get arguments from parent fragment
+        Bundle args = getArguments();
+        if(args == null){
+            this.workoutGoal = new WorkoutGoal.Factory().create();
+        } else {
+            this.workoutGoal = WorkoutGoal.fromBundle(args);
+        }
 
+        WorkoutGoalHolder holder;
         holder = new WorkoutGoalHolder();
         holder.type =       (TextView)layoutView.findViewById(R.id.profile_goal_type_value);
         holder.startVal =   (TextView)layoutView.findViewById(R.id.profile_goal_start_value);

@@ -111,11 +111,10 @@
         android:textStyle="bold"
         android:layout_marginBottom="6dp"/>
 
-    <fragment android:name="pablo.workoutapp.WorkoutGoalPagerFragment"
-        android:id="@+id/workout_goal_fragment"
+    <FrameLayout android:id="@+id/workout_goal_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        tools:layout="@layout/fragment_workout_goal_pager" />
+        android:layout_height="180dp"
+        tools:layout="@layout/fragment_workout_goal_pager"/>
 
     <Button
         android:id="@+id/workout_goal_new_button"

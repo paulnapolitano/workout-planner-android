@@ -1,5 +1,7 @@
 package pablo.workoutapp;
 
+import android.os.Bundle;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
@@ -64,13 +66,44 @@ public class WorkoutGoal {
     public int getId()                 { return id; }
     public GoalType getGoalType()      { return goal; }
     public LiftType getLiftType()      { return lift; }
-    public Integer getLiftReps()           { return liftReps; }
+    public Integer getLiftReps()       { return liftReps; }
     public DateTime getStartDate()     { return startDate; }
     public DateTime getEndDate()       { return endDate; }
     public WorkoutProfile getProfile() { return profile; }
-    public Integer getStart()              { return start; }
-    public Integer getCurrent()            { return current; }
-    public Integer getTarget()             { return target; }
+    public Integer getStart()          { return start; }
+    public Integer getCurrent()        { return current; }
+    public Integer getTarget()         { return target; }
+
+    public Bundle toBundle(){
+        Bundle args = new Bundle();
+        args.putInt("id", this.id);
+        args.putInt("goalType", this.goal.number());
+        args.putInt("liftType", this.lift.number());
+        args.putInt("liftReps", this.liftReps);
+        args.putString("startDate", DateTimeFormatHelper.dateTimeToString(this.startDate));
+        args.putString("endDate", DateTimeFormatHelper.dateTimeToString(this.endDate));
+        args.putInt("profileId", this.profile.getId());
+        args.putInt("start", this.start);
+        args.putInt("current", this.current);
+        args.putInt("target", this.target);
+
+        return args;
+    }
+
+    public static WorkoutGoal fromBundle(Bundle args){
+        return new WorkoutGoal.Factory()
+                .setId(args.getInt("id"))
+                .setGoalType(GoalType.fromNumber(args.getInt("goalType")))
+                .setLiftType(LiftType.fromNumber(args.getInt("liftType")))
+                .setLiftReps(args.getInt("liftReps"))
+                .setStartDate(DateTimeFormatHelper.stringToDateTime(args.getString("startDate")))
+                .setEndDate(DateTimeFormatHelper.stringToDateTime(args.getString("endDate")))
+                .setProfile(null)
+                .setStart(args.getInt("start"))
+                .setCurrent(args.getInt("current"))
+                .setTarget(args.getInt("target"))
+                .create();
+    }
 
     public static class Factory {
         private int id;

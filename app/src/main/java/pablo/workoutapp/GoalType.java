@@ -21,6 +21,10 @@ public enum GoalType {
     public int number(){return number;}
     public String printable(){return printable;}
 
+    public static GoalType fromNumber(int number){
+        return GoalType.values()[number];
+    }
+
     public static GoalType fromPrintable(String printable){
         switch(printable){
             case "Lose Weight":

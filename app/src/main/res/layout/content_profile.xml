@@ -111,13 +111,15 @@
         android:textStyle="bold"
         android:layout_marginBottom="6dp"/>
 
-    <ListView
-        android:id="@+id/workout_goal_list"
+    <fragment android:name="pablo.workoutapp.WorkoutGoalPagerFragment"
+        android:id="@+id/workout_goal_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="150dp"
+        tools:layout="@layout/fragment_workout_goal_pager" />
 
     <Button
         android:id="@+id/workout_goal_new_button"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Goal"

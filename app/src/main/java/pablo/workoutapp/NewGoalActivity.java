@@ -18,6 +18,8 @@ import org.joda.time.DateTime;
 
 public class NewGoalActivity extends AppCompatActivity
                              implements DatePickerFragmentListener {
+    // TODO: Fix date selection bug in goal creation
+
     Context context = this;
     DateTime startDateTime;
     DateTime endDateTime;

@@ -29,4 +29,7 @@
     <string name="minus">-</string>
     <string name="plus">+</string>
 
+    <string name="back">&lt;</string>
+    <string name="forward">&gt;</string>
+
 </resources>

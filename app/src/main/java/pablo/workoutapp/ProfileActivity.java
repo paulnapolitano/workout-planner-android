@@ -4,6 +4,11 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,16 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity
                              implements DeleteProfileDialogFragment.DeleteProfileDialogListener {
-    // TODO: Make goal view single pane to save room, up/down arrows to rotate between goals
-    // TODO: Fix date selection bug in goal creation
+    // TODO: Make activity update after goal creation
+    // TODO: Make goal fragment GONE if no goals for profile
     Context context = this;
     WorkoutProfile currentProfile;
     WorkoutDatabaseUser dbUser;
+    private WorkoutGoal[] workoutGoals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +70,13 @@ public class ProfileActivity extends AppCompatActivity
 
         // =================== Current Goals ===================
         // Get all goals associated with current profile
-        WorkoutGoal[] workoutGoals;
-        workoutGoals = dbUser.goals.forProfile(currentProfile);
-//        if(dbUser.goals.profileHasGoals(currentProfile)){
-//            // Get array of Goals linked to current profile
-//            workoutGoals = dbUser.goals.forProfile(currentProfile);
-//        } else {
-//            // Empty array
-//            workoutGoals = new WorkoutGoal[0];
-//        }
+        // workoutGoals = dbUser.goals.forProfile(currentProfile);
 
         // Inflate list of Goals using adapter
-        ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
-        final WorkoutGoalAdapter goalAdapter =
-                new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
-        workoutGoalList.setAdapter(goalAdapter);
+//        ListView workoutGoalList = (ListView) findViewById(R.id.workout_goal_list);
+//        final WorkoutGoalAdapter goalAdapter =
+//                new WorkoutGoalAdapter(context, R.layout.list_element_workout_goal, workoutGoals);
+//        workoutGoalList.setAdapter(goalAdapter);
 
         // ---------------------- New Goal ----------------------
         Button newGoalButton = (Button) findViewById(R.id.workout_goal_new_button);
@@ -123,6 +120,8 @@ public class ProfileActivity extends AppCompatActivity
         }
     }
 
+
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         int profileId = currentProfile.getId();
@@ -140,4 +139,6 @@ public class ProfileActivity extends AppCompatActivity
         DialogFragment dialog = new DeleteProfileDialogFragment();
         dialog.show(getFragmentManager(), "DeleteProfileDialogFragment");
     }
+
+
 }

@@ -140,16 +140,11 @@
             style="@style/ProfileHeader.Uncentered"
             />
 
-        <TextView
-            android:id="@+id/next_workout_date"
-            android:text="@string/profile_date_default"
-            style="@style/ProfileValue"
-            />
-
         <Button
             android:id="@+id/plan_workout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Plan new workout"/>
 
 

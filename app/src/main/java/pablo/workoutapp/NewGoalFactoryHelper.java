@@ -10,24 +10,24 @@ public class NewGoalFactoryHelper {
     public final static int TARGET = 1;
     public final static int CURRENT = 2;
 
-    private WorkoutGoal.Factory factory;
+    private WorkoutGoal.Builder builder;
 
-    public NewGoalFactoryHelper(WorkoutGoal.Factory factory){
-        this.factory = factory;
+    public NewGoalFactoryHelper(WorkoutGoal.Builder builder){
+        this.builder = builder;
     }
 
     public void setField(int field, Integer value, EditText input){
         switch (field){
             case LIFT_REPS:
-                factory.setLiftReps(value);
+                builder.setLiftReps(value);
                 input.setText(String.format("%d", value));
                 break;
             case CURRENT:
-                factory.setCurrent(value);
+                builder.setCurrent(value);
                 input.setText(String.format("%d lb", value));
                 break;
             case TARGET:
-                factory.setTarget(value);
+                builder.setTarget(value);
                 input.setText(String.format("%d lb", value));
                 break;
         }
@@ -38,13 +38,13 @@ public class NewGoalFactoryHelper {
 
         switch(field) {
             case LIFT_REPS:
-                oldValue = factory.getLiftReps();
+                oldValue = builder.getLiftReps();
                 break;
             case CURRENT:
-                oldValue = factory.getCurrent();
+                oldValue = builder.getCurrent();
                 break;
             case TARGET:
-                oldValue = factory.getTarget();
+                oldValue = builder.getTarget();
                 break;
             default:
                 oldValue = 0;
@@ -59,15 +59,15 @@ public class NewGoalFactoryHelper {
 
         switch(field) {
             case LIFT_REPS:
-                factory.setLiftReps(newValue);
+                builder.setLiftReps(newValue);
                 input.setText(String.format("%d", newValue));
                 break;
             case CURRENT:
-                factory.setCurrent(newValue);
+                builder.setCurrent(newValue);
                 input.setText(String.format("%d lb", newValue));
                 break;
             case TARGET:
-                factory.setTarget(newValue);
+                builder.setTarget(newValue);
                 input.setText(String.format("%d lb", newValue));
                 break;
             default:

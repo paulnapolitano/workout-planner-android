@@ -4,10 +4,6 @@ import android.os.Bundle;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Date;
 
 /**
  * Created by Pablo on 1/4/2016.
@@ -26,17 +22,17 @@ public class WorkoutGoal {
     private int current;
     private int target;
 
-    public WorkoutGoal(Factory factory){
-        this.id        = factory.id;
-        this.goal      = factory.goal;
-        this.lift      = factory.lift;
-        this.liftReps  = factory.liftReps;
-        this.startDate = factory.startDate;
-        this.endDate   = factory.endDate;
-        this.start     = factory.start;
-        this.current   = factory.current;
-        this.target    = factory.target;
-        this.profile   = factory.profile;
+    public WorkoutGoal(Builder builder){
+        this.id        = builder.id;
+        this.goal      = builder.goal;
+        this.lift      = builder.lift;
+        this.liftReps  = builder.liftReps;
+        this.startDate = builder.startDate;
+        this.endDate   = builder.endDate;
+        this.start     = builder.start;
+        this.current   = builder.current;
+        this.target    = builder.target;
+        this.profile   = builder.profile;
     }
 
     @Override
@@ -91,7 +87,7 @@ public class WorkoutGoal {
     }
 
     public static WorkoutGoal fromBundle(Bundle args){
-        return new WorkoutGoal.Factory()
+        return new Builder()
                 .setId(args.getInt("id"))
                 .setGoalType(GoalType.fromNumber(args.getInt("goalType")))
                 .setLiftType(LiftType.fromNumber(args.getInt("liftType")))
@@ -105,7 +101,24 @@ public class WorkoutGoal {
                 .create();
     }
 
-    public static class Factory {
+    // Boolean checks for field validity
+    public boolean validDates(){
+        return ( startDate != null && endDate != null && endDate.isAfter(startDate)); }
+    public boolean validValues(){
+        switch(goal){
+            case LOSE_WEIGHT:
+                return target < current;
+            case GAIN_WEIGHT:
+                return target > current;
+            case GAIN_STRENGTH:
+                return target > current;
+            case GAIN_STAMINA:
+                return target == current;
+        }
+        return false;
+    }
+
+    public static class Builder {
         private int id;
         private GoalType goal;
         private LiftType lift;
@@ -117,48 +130,48 @@ public class WorkoutGoal {
         private Integer current;
         private Integer target;
 
-        public Factory(){
+        public Builder(){
             this.goal = null;
             this.lift = null;
         }
 
-        public Factory setGoalType(GoalType goal){
+        public Builder setGoalType(GoalType goal){
             this.goal = goal;
             return this;
         }
-        public Factory setLiftType(LiftType lift){
+        public Builder setLiftType(LiftType lift){
             this.lift = lift;
             return this;
         }
-        public Factory setLiftReps(Integer liftReps){
+        public Builder setLiftReps(Integer liftReps){
             this.liftReps = liftReps;
             return this;
         }
-        public Factory setStartDate(DateTime startDate){
+        public Builder setStartDate(DateTime startDate){
             this.startDate = startDate;
             return this;
         }
-        public Factory setEndDate(DateTime endDate){
+        public Builder setEndDate(DateTime endDate){
             this.endDate = endDate;
             return this;
         }
-        public Factory setStart(Integer start){
+        public Builder setStart(Integer start){
             this.start = start;
             return this;
         }
-        public Factory setCurrent(Integer current){
+        public Builder setCurrent(Integer current){
             this.current = current;
             return this;
         }
-        public Factory setTarget(Integer target){
+        public Builder setTarget(Integer target){
             this.target = target;
             return this;
         }
-        public Factory setProfile(WorkoutProfile profile){
+        public Builder setProfile(WorkoutProfile profile){
             this.profile = profile;
             return this;
         }
-        public Factory setId(int id){
+        public Builder setId(int id){
             this.id = id;
             return this;
         }
@@ -181,5 +194,26 @@ public class WorkoutGoal {
 
             return new WorkoutGoal(this);
         }
+
+        // Boolean checks for field validity
+        public boolean validDates(){
+            return ( startDate != null && endDate != null && endDate.isAfter(startDate)); }
+        public boolean validValues(){
+            switch(goal){
+                case LOSE_WEIGHT:
+                    return target < current;
+                case GAIN_WEIGHT:
+                    return target > current;
+                case GAIN_STRENGTH:
+                    return target > current;
+                case GAIN_STAMINA:
+                    return target.equals(current);
+            }
+            return false;
+        }
+
+        public boolean valid(){ return validDates() && validValues(); }
+
+
     }
 }

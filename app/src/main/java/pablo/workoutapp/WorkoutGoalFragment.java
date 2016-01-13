@@ -1,6 +1,5 @@
 package pablo.workoutapp;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -31,7 +30,7 @@ public class WorkoutGoalFragment extends Fragment {
         // Get arguments from parent fragment
         Bundle args = getArguments();
         if(args == null){
-            this.workoutGoal = new WorkoutGoal.Factory().create();
+            this.workoutGoal = new WorkoutGoal.Builder().create();
         } else {
             this.workoutGoal = WorkoutGoal.fromBundle(args);
         }

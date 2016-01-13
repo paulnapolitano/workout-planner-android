@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/profile_goal_type_value"
-                style="@style/ProfileValue"
+                style="@style/GoalType"
                 />
 
         </LinearLayout>

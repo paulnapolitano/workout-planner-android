@@ -32,4 +32,8 @@
     <string name="back">&lt;</string>
     <string name="forward">&gt;</string>
 
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+
+    <string name="blahs">blah blah blah blah blah blah blah blah blah</string>
 </resources>

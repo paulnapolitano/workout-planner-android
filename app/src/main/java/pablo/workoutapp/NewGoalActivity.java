@@ -1,6 +1,5 @@
 package pablo.workoutapp;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,7 +36,10 @@ public class NewGoalActivity extends AppCompatActivity
     private final int SHOW_LIFTING = 1;
     private final int SHOW_ALL = 2;
 
-    private int visibility = SHOW_WEIGHT;
+    private int buttonVisibility = SHOW_WEIGHT;
+
+    private WorkoutGoal.Builder newGoalBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,8 @@ public class NewGoalActivity extends AppCompatActivity
         assert(getSupportActionBar()!=null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final WorkoutGoal.Factory newGoalFactory = new WorkoutGoal.Factory();
-        final NewGoalFactoryHelper factoryHelper = new NewGoalFactoryHelper(newGoalFactory);
+        newGoalBuilder = new WorkoutGoal.Builder();
+        final NewGoalFactoryHelper factoryHelper = new NewGoalFactoryHelper(newGoalBuilder);
         final WorkoutDatabaseUser dbUser = new WorkoutDatabaseUser(context);
 
         // =================================== GoalType selector ===================================
@@ -68,22 +70,22 @@ public class NewGoalActivity extends AppCompatActivity
         goalTypeSpinner.setAdapter(goalTypeAdapter);
 
         // Set factory goal type to default value
-        newGoalFactory.setGoalType(GoalType.values()[0]);
+        newGoalBuilder.setGoalType(GoalType.values()[0]);
 
         goalTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 GoalType goal = GoalType.fromPrintable((String) parent.getItemAtPosition(position));
-                newGoalFactory.setGoalType(goal);
+                newGoalBuilder.setGoalType(goal);
                 assert(goal!=null);
                 switch(goal){
                     case GAIN_STAMINA:
-                        visibility = SHOW_LIFTING;
+                        buttonVisibility = SHOW_LIFTING;
                         break;
                     case GAIN_STRENGTH:
-                        visibility = SHOW_LIFTING;
+                        buttonVisibility = SHOW_LIFTING;
                         break;
                     default:
-                        visibility = SHOW_WEIGHT;
+                        buttonVisibility = SHOW_WEIGHT;
                 }
                 updateVisibility();
             }
@@ -107,12 +109,12 @@ public class NewGoalActivity extends AppCompatActivity
         liftTypeSpinner.setAdapter(liftTypeAdapter);
 
         // Set factory goal type to default value
-        newGoalFactory.setLiftType(LiftType.values()[0]);
+        newGoalBuilder.setLiftType(LiftType.values()[0]);
 
         liftTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 LiftType lift = LiftType.fromPrintable((String) parent.getItemAtPosition(position));
-                newGoalFactory.setLiftType(lift);
+                newGoalBuilder.setLiftType(lift);
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -238,18 +240,25 @@ public class NewGoalActivity extends AppCompatActivity
         Button createButton = (Button) findViewById(R.id.new_goal_create_button);
         createButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                // Set goal's profile to current
-                WorkoutProfile currentProfile = dbUser.profiles.getCurrent();
-                newGoalFactory.setProfile(currentProfile);
+                // Ask user clarifying questions if necessary
+                boolean valid = checkValidity(newGoalBuilder);
+                System.out.println("Start: " + newGoalBuilder.getStartDate());
+                System.out.println("End: " + newGoalBuilder.getEndDate());
 
-                // Add goal to database
-                WorkoutGoal newGoal = newGoalFactory.create();
-                dbUser.goals.objectToRow(newGoal);
+                if(valid) {
+                    // Set goal's profile to current
+                    WorkoutProfile currentProfile = dbUser.profiles.getCurrent();
+                    newGoalBuilder.setProfile(currentProfile);
 
-                // Move back to profile view
-                Intent resultIntent = new Intent();
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                    // Add goal to database
+                    WorkoutGoal newGoal = newGoalBuilder.create();
+                    dbUser.goals.objectToRow(newGoal);
+
+                    // Move back to profile view
+                    Intent resultIntent = new Intent();
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
             }
         });
 
@@ -262,8 +271,8 @@ public class NewGoalActivity extends AppCompatActivity
     }
 
 
-    public void updateVisibility(){
-        switch(visibility) {
+    private void updateVisibility(){
+        switch(buttonVisibility) {
             case SHOW_LIFTING:
                 liftRepsBlock.setVisibility(View.VISIBLE);
                 liftTypeBlock.setVisibility(View.VISIBLE);
@@ -275,6 +284,19 @@ public class NewGoalActivity extends AppCompatActivity
         }
     }
 
+    private boolean checkValidity(WorkoutGoal.Builder newGoalBuilder){
+        if(!newGoalBuilder.valid()){
+            showErrorDialog(newGoalBuilder);
+            return false;
+        }
+        return true;
+    }
+
+    private void showErrorDialog(WorkoutGoal.Builder newGoalBuilder){
+        NewGoalErrorDialogFragment alertDialog = NewGoalErrorDialogFragment.newInstance(newGoalBuilder);
+        alertDialog.show(getFragmentManager(), "TAG");
+    }
+
     @Override
     public void onStartDateSet(DatePicker view, int year, int month, int day) {
         startDateTime = new DateTime(year, month + 1, day, 0, 0, 0, 0);
@@ -282,6 +304,8 @@ public class NewGoalActivity extends AppCompatActivity
             endDateTime = startDateTime;
             endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
         }
+        newGoalBuilder.setStartDate(startDateTime);
+        newGoalBuilder.setEndDate(endDateTime);
         startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
     }
 
@@ -292,6 +316,8 @@ public class NewGoalActivity extends AppCompatActivity
             startDateTime = endDateTime;
             startDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(startDateTime));
         }
+        newGoalBuilder.setStartDate(startDateTime);
+        newGoalBuilder.setEndDate(endDateTime);
         endDateDisplay.setText(DateTimeFormatHelper.dateTimeToDisplayString(endDateTime));
     }
 }

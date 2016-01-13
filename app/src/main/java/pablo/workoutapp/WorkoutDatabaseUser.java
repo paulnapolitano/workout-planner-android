@@ -129,8 +129,8 @@ public class WorkoutDatabaseUser {
                         cursor.getString(cursor.getColumnIndexOrThrow(
                                 DbContract.GoalEntry.COLUMN_NAME_END_DATE)));
 
-                WorkoutGoal.Factory workoutGoalFactory = new WorkoutGoal.Factory();
-                workoutGoal = workoutGoalFactory.setId(id)
+                WorkoutGoal.Builder workoutGoalBuilder = new WorkoutGoal.Builder();
+                workoutGoal = workoutGoalBuilder.setId(id)
                                                 .setCurrent(currentVal)
                                                 .setTarget(targetVal)
                                                 .setStart(startVal)
